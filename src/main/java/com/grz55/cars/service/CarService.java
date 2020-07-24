@@ -3,6 +3,7 @@ package com.grz55.cars.service;
 import com.grz55.cars.model.Car;
 import com.grz55.cars.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class CarService {
         return carRepository.findAll();
     }
 
-    public List<Car> findAllByGivenParamsPaged(CarSpecification carSpecification, Pageable pageable) {
-        return carRepository.findAll(carSpecification, pageable).getContent();
+    public Page<Car> findAllByGivenParamsPaged(CarSpecification carSpecification, Pageable pageable) {
+        return carRepository.findAll(carSpecification, pageable);
     }
 }

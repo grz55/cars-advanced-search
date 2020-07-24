@@ -6,6 +6,7 @@ import com.grz55.cars.service.SearchCriteria;
 import com.grz55.cars.service.SearchOperation;
 import com.grz55.cars.model.Car;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -35,7 +36,7 @@ public class CarController {
     }
 
     @GetMapping("/cars")
-    public List<Car> getCarsByGivenParams(@RequestParam(name = "brand") Optional<String> brand,
+    public Page<Car> getCarsByGivenParams(@RequestParam(name = "brand") Optional<String> brand,
                                           @RequestParam(name = "model") Optional<String> model,
                                           @RequestParam(name = "topSpeedFrom") Optional<Integer> topSpeedFrom,
                                           @RequestParam(name = "topSpeedTo") Optional<Integer> topSpeedTo,

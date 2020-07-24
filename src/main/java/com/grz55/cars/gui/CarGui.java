@@ -11,6 +11,7 @@ import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class CarGui extends VerticalLayout {
 
     private TextField textFieldBrand;
     private TextField textFieldModel;
+    private TextField textFieldResultsCount;
     private IntegerField integerFieldPageNumber;
     private IntegerField integerFieldTopSpeedFrom;
     private IntegerField integerFieldTopSpeedTo;
@@ -53,6 +55,7 @@ public class CarGui extends VerticalLayout {
         this.carController = carController;
         textFieldBrand = new TextField("Brand:");
         textFieldModel = new TextField("Model:");
+        textFieldResultsCount = new TextField();
         integerFieldTopSpeedFrom = new IntegerField("Min top speed:");
         integerFieldTopSpeedTo = new IntegerField("Max top speed:");
         integerFieldProductionYearFrom = new IntegerField("Min production year:");
@@ -84,6 +87,7 @@ public class CarGui extends VerticalLayout {
 
         buttonSearch = new Button("Find cars");
         buttonClear = new Button("Clear search criteria");
+        textFieldResultsCount.setVisible(false);
         
         carsGrid = new Grid<>(Car.class);
         horizontalLayoutSearchOptions = new HorizontalLayout();
@@ -99,15 +103,18 @@ public class CarGui extends VerticalLayout {
         horizontalLayoutSearchOptions.add(textFieldBrand, textFieldModel);
         horizontalLayoutAdvancedSearchOptions.add(integerFieldTopSpeedFrom, integerFieldTopSpeedTo, integerFieldProductionYearFrom, integerFieldProductionYearTo, integerFieldMileageFrom, integerFieldMileageTo, integerFieldPriceFrom, integerFieldPriceTo);
         horizontalLayoutPagingOptions.add(integerFieldPageSize, integerFieldPageNumber, sortByComboBox, sortOrderComboBox);
-        horizontalLayoutButtons.add(buttonSearch, buttonClear);
+        horizontalLayoutButtons.add(buttonSearch, buttonClear, textFieldResultsCount);
         add(horizontalLayoutSearchOptions, horizontalLayoutAdvancedSearchOptions, horizontalLayoutPagingOptions, horizontalLayoutButtons, carsGrid);
     }
 
     private void initActions() {
         buttonSearch.addClickListener(buttonClickEvent -> {
             if (integerFieldPageNumber.getValue() >= 1) {
-                List<Car> carsByGivenParamsFound = carController.getCarsByGivenParams(textFieldBrand.getOptionalValue(), textFieldModel.getOptionalValue(), integerFieldTopSpeedFrom.getOptionalValue(), integerFieldTopSpeedTo.getOptionalValue(), integerFieldProductionYearFrom.getOptionalValue(), integerFieldProductionYearTo.getOptionalValue(), integerFieldMileageFrom.getOptionalValue(), integerFieldMileageTo.getOptionalValue(), integerFieldPriceFrom.getOptionalValue(), integerFieldPriceTo.getOptionalValue(), integerFieldPageNumber.getValue() - 1, integerFieldPageSize.getValue(), sortByComboBox.getValue(), sortOrderComboBox.getValue());
-                carsGrid.setItems(carsByGivenParamsFound);
+                Page<Car> carsByGivenParamsFound = carController.getCarsByGivenParams(textFieldBrand.getOptionalValue(), textFieldModel.getOptionalValue(), integerFieldTopSpeedFrom.getOptionalValue(), integerFieldTopSpeedTo.getOptionalValue(), integerFieldProductionYearFrom.getOptionalValue(), integerFieldProductionYearTo.getOptionalValue(), integerFieldMileageFrom.getOptionalValue(), integerFieldMileageTo.getOptionalValue(), integerFieldPriceFrom.getOptionalValue(), integerFieldPriceTo.getOptionalValue(), integerFieldPageNumber.getValue() - 1, integerFieldPageSize.getValue(), sortByComboBox.getValue(), sortOrderComboBox.getValue());
+                carsGrid.setItems(carsByGivenParamsFound.getContent());
+                textFieldResultsCount.setVisible(true);
+                textFieldResultsCount.setReadOnly(true);
+                textFieldResultsCount.setValue("Results found: " + carsByGivenParamsFound.getTotalElements());
             }
         });
 
