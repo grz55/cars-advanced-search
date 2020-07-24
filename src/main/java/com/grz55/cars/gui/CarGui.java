@@ -88,7 +88,9 @@ public class CarGui extends VerticalLayout {
         buttonSearch = new Button("Find cars");
         buttonClear = new Button("Clear search criteria");
         textFieldResultsCount.setVisible(false);
-        
+        textFieldResultsCount.setReadOnly(true);
+
+
         carsGrid = new Grid<>(Car.class);
         horizontalLayoutSearchOptions = new HorizontalLayout();
         horizontalLayoutAdvancedSearchOptions = new HorizontalLayout();
@@ -113,7 +115,6 @@ public class CarGui extends VerticalLayout {
                 Page<Car> carsByGivenParamsFound = carController.getCarsByGivenParams(textFieldBrand.getOptionalValue(), textFieldModel.getOptionalValue(), integerFieldTopSpeedFrom.getOptionalValue(), integerFieldTopSpeedTo.getOptionalValue(), integerFieldProductionYearFrom.getOptionalValue(), integerFieldProductionYearTo.getOptionalValue(), integerFieldMileageFrom.getOptionalValue(), integerFieldMileageTo.getOptionalValue(), integerFieldPriceFrom.getOptionalValue(), integerFieldPriceTo.getOptionalValue(), integerFieldPageNumber.getValue() - 1, integerFieldPageSize.getValue(), sortByComboBox.getValue(), sortOrderComboBox.getValue());
                 carsGrid.setItems(carsByGivenParamsFound.getContent());
                 textFieldResultsCount.setVisible(true);
-                textFieldResultsCount.setReadOnly(true);
                 textFieldResultsCount.setValue("Results found: " + carsByGivenParamsFound.getTotalElements());
             }
         });
