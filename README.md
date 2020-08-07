@@ -2,6 +2,8 @@
 
 When compiling, data.sql file should add test cars to database.
 Frontend available on: /gui/cars
+Missing Vaadin files in this GitHub repo may cause problems. 
+However API should work normally (use Postman for testing)
 
 Example endpoints:
 
